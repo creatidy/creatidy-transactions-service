@@ -1,3 +1,4 @@
+from decimal import Decimal
 from enum import Enum
 
 
@@ -12,8 +13,9 @@ class TransactionType(Enum):
     TAX = 8
 
 
-class Transaction:
+class Transaction(object):
 
+    transaction_sum: Decimal
     transaction_type: TransactionType
 
     def __init__(self, **kwargs):
@@ -29,3 +31,17 @@ class Transaction:
         self.related_account = kwargs['related_account']
         self.transaction_sum = kwargs['transaction_sum']
 
+    def serialize(self):
+        return {
+            'data_source': self.data_source,
+            'client_id': self.client_id,
+            'account': self.account,
+            'transaction_id': self.transaction_id,
+            'transaction_type': self.transaction_type,
+            'asset': self.asset,
+            'timestamp': self.timestamp,
+            'order_id': self.order_id,
+            'order_position': self.order_position,
+            'related_account': self.related_account,
+            'transaction_sum': str(self.transaction_sum)
+        }
