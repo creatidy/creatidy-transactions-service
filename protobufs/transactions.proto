@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+message SearchRequest {
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+}
+
+message TransactionsList {
+  repeated Transaction transaction = 1;
+}
+
+message Transaction {
+  string data_source = 1;
+  string client_id = 2;
+  string account = 3;
+  string transaction_id = 4;
+  string transaction_type = 5;
+  string asset = 6;
+  string timestamp = 7;
+  string order_id = 8;
+  string order_position = 9;
+  string related_account = 10;
+  string transaction_sum = 11;
+}
+
+service Transactions {
+  rpc GetList(SearchRequest) returns (TransactionsList) {}
+}
