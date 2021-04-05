@@ -43,7 +43,7 @@ class Exante:
                 'client_id': 'local',
                 'account': item['accountId'],
                 'transaction_id': item['id'],
-                'transaction_type': str(transaction_type),
+                'transaction_type': transaction_type.name,
                 'asset': item['asset'],
                 'timestamp': item['when_ts'],
                 'order_id': item['orderId'],

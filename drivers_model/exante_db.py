@@ -7,25 +7,25 @@ class ExanteDatabase:
         config = configparser.ConfigParser()
         config.read(cfg)
 
-        user = config['ExanteDB']['USER']
-        password = config['ExanteDB']['PASSWORD']
-        host = config['ExanteDB']['HOST']
-        database = config['ExanteDB']['DATABASE']
+        user = config['CreatidyDB']['USER']
+        password = config['CreatidyDB']['PASSWORD']
+        host = config['CreatidyDB']['HOST']
+        database = config['CreatidyDB']['DATABASE']
         self.cnx = mysql.connector.connect(user=user, password=password, host=host, database=database)
 
     def import_from_db(self) -> list:
         cursor = self.cnx.cursor()
-        query = ("""SELECT `transactions`.`symbolId`,
-                        `transactions`.`orderId`,
-                        `transactions`.`operationType`,
-                        `transactions`.`uuid`,
-                        `transactions`.`orderPos`,
-                        `transactions`.`accountId`,
-                        `transactions`.`id`,
-                        `transactions`.`when_ts`,
-                        `transactions`.`asset`,
-                        `transactions`.`sum_dec`
-                    FROM `exante`.`transactions`""")
+        query = ("""SELECT `exante`.`symbolId`,
+                        `exante`.`orderId`,
+                        `exante`.`operationType`,
+                        `exante`.`uuid`,
+                        `exante`.`orderPos`,
+                        `exante`.`accountId`,
+                        `exante`.`id`,
+                        UNIX_TIMESTAMP(`exante`.`when_ts`),
+                        `exante`.`asset`,
+                        `exante`.`sum_dec`
+                    FROM `creatidy`.`exante`""")
         cursor.execute(query)
         data = cursor.fetchall()
         cursor.close()

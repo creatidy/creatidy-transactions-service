@@ -15,9 +15,6 @@ class TransactionType(Enum):
 
 class Transaction(object):
 
-    transaction_sum: Decimal
-    transaction_type: TransactionType
-
     def __init__(self, **kwargs):
         for field in self.fields():
             if field in kwargs:
@@ -29,3 +26,12 @@ class Transaction(object):
     def fields():
         return ['data_source', 'client_id', 'account', 'transaction_id', 'transaction_type', 'asset',
                 'timestamp', 'order_id', 'order_position', 'related_account', 'transaction_sum']
+
+
+class TransactionsList(object):
+
+    def __init__(self):
+        self.list = []
+
+    def append(self, transaction: Transaction):
+        self.list.append(transaction)
