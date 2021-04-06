@@ -17,12 +17,14 @@ class Exante:
             transaction_sum = item['sum_dec']
             if transaction_type == 'TRADE':
                 transaction_type = TransactionType.TRADE
-            elif transaction_type == 'AUTOCONVERSION':
-                transaction_type = TransactionType.TRADE
+            elif transaction_type == 'AUTOCONVERSION' and transaction_sum > 0:
+                transaction_type = TransactionType.DEPOSIT
+            elif transaction_type == 'AUTOCONVERSION' and transaction_sum < 0:
+                transaction_type = TransactionType.WITHDRAWAL
             elif transaction_type == 'BANK CHARGE':
                 transaction_type = TransactionType.FEE
             elif transaction_type == 'COMMISSION':
-                transaction_type = TransactionType.FEE
+                transaction_type = TransactionType.COMMISSION
             elif transaction_type == 'DIVIDEND':
                 transaction_type = TransactionType.DIVIDEND
             elif transaction_type == 'FUNDING/WITHDRAWAL' and transaction_sum > 0:
@@ -30,7 +32,7 @@ class Exante:
             elif transaction_type == 'FUNDING/WITHDRAWAL' and transaction_sum < 0:
                 transaction_type = TransactionType.WITHDRAWAL
             elif transaction_type == 'INTEREST':
-                transaction_type = TransactionType.INTEREST
+                transaction_type = TransactionType.FEE
             elif transaction_type == 'SUBACCOUNT TRANSFER':
                 transaction_type = TransactionType.TRANSFER
             elif transaction_type == 'TAX':
@@ -43,6 +45,7 @@ class Exante:
                 'client_id': 'local',
                 'account': item['accountId'],
                 'transaction_id': item['id'],
+                'related_asset': item['symbolId'],
                 'transaction_type': transaction_type.name,
                 'asset': item['asset'],
                 'timestamp': item['when_ts'],

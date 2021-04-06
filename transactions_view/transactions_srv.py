@@ -10,6 +10,7 @@ import protobufs.transactions_pb2_grpc
 from import_controller.exante_controller import Exante
 from dto.transaction import Transaction
 
+
 class TransactionsServicer(protobufs.transactions_pb2_grpc.TransactionsServicer):
 
     def GetList(self, request, context):
@@ -19,10 +20,11 @@ class TransactionsServicer(protobufs.transactions_pb2_grpc.TransactionsServicer)
         t: Transaction
         for t in transactions:
             transaction = protobufs.transactions_pb2.Transaction()
-            for key in t.fields():
+            for key in t.__dict__.keys():
                 transaction.__setattr__(key, str(t.__getattribute__(key)))
             response.transaction.append(transaction)
         return response
+
 
 # create a gRPC server
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

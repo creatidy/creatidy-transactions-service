@@ -15,13 +15,14 @@ message Transaction {
   string client_id = 2;
   string account = 3;
   string transaction_id = 4;
-  string transaction_type = 5;
-  string asset = 6;
-  string timestamp = 7;
-  string order_id = 8;
-  string order_position = 9;
-  string related_account = 10;
-  string transaction_sum = 11;
+  string related_asset = 5;
+  string transaction_type = 6;
+  string asset = 7;
+  string timestamp = 8;
+  string order_id = 9;
+  string order_position = 10;
+  string related_account = 11;
+  string transaction_sum = 12;
 }
 
 service Transactions {
