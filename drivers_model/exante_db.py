@@ -25,7 +25,8 @@ class ExanteDatabase:
                         UNIX_TIMESTAMP(`exante`.`when_ts`),
                         `exante`.`asset`,
                         `exante`.`sum_dec`
-                    FROM `creatidy`.`exante`""")
+                    FROM `creatidy`.`exante`
+                    ORDER BY `exante`.`when_ts` ASC""")
         cursor.execute(query)
         data = cursor.fetchall()
         cursor.close()

@@ -23,6 +23,7 @@ message Transaction {
   string order_position = 10;
   string related_account = 11;
   string transaction_sum = 12;
+  string split = 13;
 }
 
 service Transactions {

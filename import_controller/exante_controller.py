@@ -13,32 +13,36 @@ class Exante:
         transactions = db.import_from_db()
         result = []
         for item in transactions:
-            transaction_type = item['operationType']
+            operation_type = item['operationType']
             transaction_sum = item['sum_dec']
-            if transaction_type == 'TRADE':
+            split = None
+            if operation_type == 'TRADE':
                 transaction_type = TransactionType.TRADE
-            elif transaction_type == 'AUTOCONVERSION' and transaction_sum > 0:
+            elif operation_type == 'AUTOCONVERSION' and transaction_sum > 0:
                 transaction_type = TransactionType.DEPOSIT
-            elif transaction_type == 'AUTOCONVERSION' and transaction_sum < 0:
+            elif operation_type == 'AUTOCONVERSION' and transaction_sum < 0:
                 transaction_type = TransactionType.WITHDRAWAL
-            elif transaction_type == 'BANK CHARGE':
+            elif operation_type == 'BANK CHARGE':
                 transaction_type = TransactionType.FEE
-            elif transaction_type == 'COMMISSION':
+            elif operation_type == 'COMMISSION':
                 transaction_type = TransactionType.COMMISSION
-            elif transaction_type == 'DIVIDEND':
+            elif operation_type == 'DIVIDEND':
                 transaction_type = TransactionType.DIVIDEND
-            elif transaction_type == 'FUNDING/WITHDRAWAL' and transaction_sum > 0:
+            elif operation_type == 'FUNDING/WITHDRAWAL' and transaction_sum > 0:
                 transaction_type = TransactionType.DEPOSIT
-            elif transaction_type == 'FUNDING/WITHDRAWAL' and transaction_sum < 0:
+            elif operation_type == 'FUNDING/WITHDRAWAL' and transaction_sum < 0:
                 transaction_type = TransactionType.WITHDRAWAL
-            elif transaction_type == 'INTEREST':
+            elif operation_type == 'INTEREST':
                 transaction_type = TransactionType.FEE
-            elif transaction_type == 'SUBACCOUNT TRANSFER':
+            elif operation_type == 'SUBACCOUNT TRANSFER':
                 transaction_type = TransactionType.TRANSFER
-            elif transaction_type == 'TAX':
+            elif operation_type == 'TAX':
                 transaction_type = TransactionType.TAX
+            elif str(operation_type).startswith('STOCK SPLIT'):
+                transaction_type = TransactionType.STOCK_SPLIT
+                split = str(operation_type).split(' ')[-1]
             else:
-                raise Exception(f"Unknown transaction type {transaction_type}")
+                raise Exception(f"Unknown transaction type {operation_type}")
 
             kwargs = {
                 'data_source': 'ExanteDB',
@@ -52,7 +56,8 @@ class Exante:
                 'order_id': item['orderId'],
                 'order_position': item['orderPos'],
                 'related_account': '',
-                'transaction_sum': Decimal(transaction_sum)
+                'transaction_sum': Decimal(transaction_sum),
+                'split': split
             }
             transaction = Transaction(**kwargs)
             result.append(transaction)
