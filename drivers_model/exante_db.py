@@ -3,7 +3,7 @@ import configparser
 
 class ExanteDatabase:
 
-    def __init__(self, cfg='../config/config.ini'):
+    def __init__(self, cfg='./config/config.ini'):
         config = configparser.ConfigParser()
         config.read(cfg)
 
