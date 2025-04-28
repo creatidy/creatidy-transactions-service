@@ -1,7 +1,9 @@
 import mysql.connector
 import configparser
 
-class ExanteDatabase:
+TRANSACTIONS_TABLE = 'ib_migr'
+
+class TxDatabase:
 
     def __init__(self, cfg='./config/config.ini'):
         config = configparser.ConfigParser()
@@ -15,18 +17,18 @@ class ExanteDatabase:
 
     def import_from_db(self) -> list:
         cursor = self.cnx.cursor()
-        query = ("""SELECT `exante`.`symbolId`,
-                        `exante`.`orderId`,
-                        `exante`.`operationType`,
-                        `exante`.`uuid`,
-                        `exante`.`orderPos`,
-                        `exante`.`accountId`,
-                        `exante`.`id`,
-                        UNIX_TIMESTAMP(`exante`.`when_ts`),
-                        `exante`.`asset`,
-                        `exante`.`sum_dec`
-                    FROM `creatidy`.`exante`
-                    ORDER BY `exante`.`when_ts` ASC""")
+        query = (f"""SELECT {TRANSACTIONS_TABLE}.`symbolId`,
+                        {TRANSACTIONS_TABLE}.`orderId`,
+                        {TRANSACTIONS_TABLE}.`operationType`,
+                        {TRANSACTIONS_TABLE}.`uuid`,
+                        {TRANSACTIONS_TABLE}.`orderPos`,
+                        {TRANSACTIONS_TABLE}.`accountId`,
+                        {TRANSACTIONS_TABLE}.`id`,
+                        UNIX_TIMESTAMP({TRANSACTIONS_TABLE}.`when_ts`),
+                        {TRANSACTIONS_TABLE}.`asset`,
+                        {TRANSACTIONS_TABLE}.`sum_dec`
+                    FROM `creatidy`.{TRANSACTIONS_TABLE}
+                    ORDER BY {TRANSACTIONS_TABLE}.`when_ts` ASC""")
         cursor.execute(query)
         data = cursor.fetchall()
         cursor.close()

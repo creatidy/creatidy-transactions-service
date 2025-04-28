@@ -1,4 +1,4 @@
-from drivers_model.exante_db import ExanteDatabase
+from drivers_model.tx_db import TxDatabase
 from decimal import Decimal
 from dto.transaction import Transaction, TransactionType
 
@@ -9,7 +9,7 @@ class Exante:
         pass
 
     def import_from_external_source(self) -> list:
-        db = ExanteDatabase()
+        db = TxDatabase()
         transactions = db.import_from_db()
         result = []
         for item in transactions:
